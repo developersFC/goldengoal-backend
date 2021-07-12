@@ -7,6 +7,7 @@ const jwksClient = require('jwks-rsa');
 const app = express();
 app.use(cors());
 const PORT = process.env.PORT || 8080;
+const teamModel = require('./model/Team.model');
 
 const {
   getLeague,
@@ -14,7 +15,11 @@ const {
   getTeamStats,
 } = require('./controller/Rank.controller');
 
-const { getTeam } = require('./controller/FavTeam.controller');
+const {
+  getFavTeam,
+  getLeagueFav,
+  getStandingFav,
+} = require('./controller/FavTeam.controller');
 
 mongoose.connect(
   `mongodb+srv://saif:${process.env.PASSWORD}@cluster0.yecvi.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`,
@@ -29,6 +34,10 @@ db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function () {
   console.log('Connected :)');
 });
+
+// teamModel.remove({}, () => {
+//   console.log('TeamModel was removed');
+// });
 
 const client = jwksClient({
   jwksUri: `https://${process.env.AUTH0_DOMAIN}/.well-known/jwks.json`,
@@ -55,6 +64,8 @@ app.get('/authorize', (req, res) => {
 app.get('/leagues', getLeague);
 app.get('/rank', getStandings);
 
-app.get('/team', getTeam);
+app.get('/favteam', getFavTeam);
+app.get('/favleague', getLeagueFav);
+app.get('/favstanding', getStandingFav);
 
 app.listen(PORT, () => console.log(`listening on ${PORT}`));
