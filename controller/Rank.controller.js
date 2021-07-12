@@ -14,7 +14,7 @@ const getLeague = (req, res) => {
     url: 'https://api-football-beta.p.rapidapi.com/leagues',
     params: { code: code, type: 'league' },
     headers: {
-      'x-rapidapi-key': process.env.X_RAPIDAPI_KEY,
+      'x-rapidapi-key': process.env.X_RAPIDAPI_KEY_2,
       'x-rapidapi-host': process.env.X_RAPIDAPI_HOST,
     },
   };
@@ -41,7 +41,7 @@ const getStandings = (req, res) => {
     url: 'https://api-football-beta.p.rapidapi.com/standings',
     params: { season: '2021', league: league },
     headers: {
-      'x-rapidapi-key': process.env.X_RAPIDAPI_KEY,
+      'x-rapidapi-key': process.env.X_RAPIDAPI_KEY_2,
       'x-rapidapi-host': process.env.X_RAPIDAPI_HOST,
     },
   };
@@ -51,7 +51,12 @@ const getStandings = (req, res) => {
     .then(function (response) {
       let data = response.data.response[0].league.standings[0];
       standings = data.map((team) => {
-        return { name: team.team.name, id: team.team.id };
+        return {
+          rank: team.rank,
+          name: team.team.name,
+          id: team.team.id,
+          points: team.points,
+        };
       });
       res.send(standings);
     })
@@ -68,7 +73,7 @@ const getTeam = (req, res) => {
     url: 'https://api-football-beta.p.rapidapi.com/teams',
     params: { id: id, league: league, season: '2021' },
     headers: {
-      'x-rapidapi-key': process.env.X_RAPIDAPI_KEY,
+      'x-rapidapi-key': process.env.X_RAPIDAPI_KEY_2,
       'x-rapidapi-host': process.env.X_RAPIDAPI_HOST,
     },
   };
