@@ -21,6 +21,8 @@ const {
   getStandingFav,
 } = require('./controller/FavTeam.controller');
 
+const liveScore = require('./controller/LiveScore.controller')
+
 mongoose.connect(
   `mongodb+srv://saif:${process.env.PASSWORD}@cluster0.yecvi.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`,
   {
@@ -67,5 +69,7 @@ app.get('/rank', getStandings);
 app.get('/favteam', getFavTeam);
 app.get('/favleague', getLeagueFav);
 app.get('/favstanding', getStandingFav);
+
+app.get('/liveScore',liveScore)
 
 app.listen(PORT, () => console.log(`listening on ${PORT}`));
