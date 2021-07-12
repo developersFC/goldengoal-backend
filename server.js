@@ -11,11 +11,13 @@ const PORT = process.env.PORT || 8080;
 const {
   getLeague,
   getStandings,
-  getTeam,
+  getTeamStats,
 } = require('./controller/Rank.controller');
 
+const { getTeam } = require('./controller/FavTeam.controller');
+
 mongoose.connect(
-  `mongodb+srv://saif:${process.env.PASSWORD}@cluster0.kgujx.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`,
+  `mongodb+srv://saif:${process.env.PASSWORD}@cluster0.yecvi.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`,
   {
     useNewUrlParser: true,
     useUnifiedTopology: true,
@@ -52,6 +54,7 @@ app.get('/authorize', (req, res) => {
 
 app.get('/leagues', getLeague);
 app.get('/rank', getStandings);
-app.get('/team', getStandings);
+
+app.get('/team', getTeam);
 
 app.listen(PORT, () => console.log(`listening on ${PORT}`));

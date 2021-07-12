@@ -1,6 +1,5 @@
 const { default: axios } = require('axios');
 require('dotenv').config();
-const teamModel = require('../model/Team.model');
 
 let leagues = [];
 let standings = [];
@@ -39,7 +38,7 @@ const getStandings = (req, res) => {
   let options = {
     method: 'GET',
     url: 'https://api-football-beta.p.rapidapi.com/standings',
-    params: { season: '2021', league: league },
+    params: { season: '2020', league: league },
     headers: {
       'x-rapidapi-key': process.env.X_RAPIDAPI_KEY_2,
       'x-rapidapi-host': process.env.X_RAPIDAPI_HOST,
@@ -65,13 +64,13 @@ const getStandings = (req, res) => {
     });
 };
 
-const getTeam = (req, res) => {
+const getTeamStats = (req, res) => {
   const { id, league } = req.query;
 
   let options = {
     method: 'GET',
     url: 'https://api-football-beta.p.rapidapi.com/teams',
-    params: { id: id, league: league, season: '2021' },
+    params: { id: id, league: league, season: '2020' },
     headers: {
       'x-rapidapi-key': process.env.X_RAPIDAPI_KEY_2,
       'x-rapidapi-host': process.env.X_RAPIDAPI_HOST,
@@ -92,4 +91,4 @@ const getTeam = (req, res) => {
     });
 };
 
-module.exports = { getLeague, getStandings, getTeam };
+module.exports = { getLeague, getStandings, getTeamStats };
