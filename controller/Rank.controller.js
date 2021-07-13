@@ -1,9 +1,4 @@
 const { default: axios } = require('axios');
-require('dotenv').config();
-
-let leagues = [];
-let standings = [];
-let favTeams = [];
 
 const getLeague = (req, res) => {
   const { code } = req.query;
@@ -13,22 +8,22 @@ const getLeague = (req, res) => {
     url: 'https://api-football-beta.p.rapidapi.com/leagues',
     params: { code: code, type: 'league' },
     headers: {
-      'x-rapidapi-key': process.env.X_RAPIDAPI_KEY_2,
+      'x-rapidapi-key': process.env.X_RAPIDAPI_KEY_5,
       'x-rapidapi-host': process.env.X_RAPIDAPI_HOST,
     },
   };
 
   axios
     .request(options)
-    .then(function (response) {
-      let data = response.data.response;
-      leagues = data.map((league) => {
+    .then((response) => {
+      let leagues = response.data.response.map((league) => {
         return { name: league.league.name, id: league.league.id };
       });
+
       res.send(leagues);
     })
-    .catch(function (error) {
-      console.error(error);
+    .catch((error) => {
+      res.send(error);
     });
 };
 
@@ -40,55 +35,29 @@ const getStandings = (req, res) => {
     url: 'https://api-football-beta.p.rapidapi.com/standings',
     params: { season: '2020', league: league },
     headers: {
-      'x-rapidapi-key': process.env.X_RAPIDAPI_KEY_2,
+      'x-rapidapi-key': process.env.X_RAPIDAPI_KEY_5,
       'x-rapidapi-host': process.env.X_RAPIDAPI_HOST,
     },
   };
 
   axios
     .request(options)
-    .then(function (response) {
-      let data = response.data.response[0].league.standings[0];
-      standings = data.map((team) => {
-        return {
-          rank: team.rank,
-          name: team.team.name,
-          id: team.team.id,
-          points: team.points,
-        };
-      });
+    .then((response) => {
+      let standings = response.data.response[0].league.standings[0].map(
+        (team) => {
+          return {
+            rank: team.rank,
+            name: team.team.name,
+            id: team.team.id,
+            points: team.points,
+          };
+        }
+      );
       res.send(standings);
     })
-    .catch(function (error) {
-      console.error(error);
+    .catch((error) => {
+      res.send(error);
     });
 };
 
-const getTeamStats = (req, res) => {
-  const { id, league } = req.query;
-
-  let options = {
-    method: 'GET',
-    url: 'https://api-football-beta.p.rapidapi.com/teams',
-    params: { id: id, league: league, season: '2020' },
-    headers: {
-      'x-rapidapi-key': process.env.X_RAPIDAPI_KEY_2,
-      'x-rapidapi-host': process.env.X_RAPIDAPI_HOST,
-    },
-  };
-
-  axios
-    .request(options)
-    .then(function (response) {
-      let data = response.data.response;
-      favTeams = data.map((team) => {
-        return new { name: team.team.name, id: team.team.id }();
-      });
-      res.send(standings);
-    })
-    .catch(function (error) {
-      console.error(error);
-    });
-};
-
-module.exports = { getLeague, getStandings, getTeamStats };
+module.exports = { getLeague, getStandings };
