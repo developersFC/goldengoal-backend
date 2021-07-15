@@ -9,7 +9,7 @@ const getLeague = (req, res) => {
     url: 'https://api-football-beta.p.rapidapi.com/leagues',
     params: { code: code, type: 'league' },
     headers: {
-      'x-rapidapi-key': process.env.X_RAPIDAPI_KEY12,
+      'x-rapidapi-key': process.env.X_RAPIDAPI_KEY,
       'x-rapidapi-host': process.env.X_RAPIDAPI_HOST,
     },
   };
@@ -36,7 +36,7 @@ const getStandings = (req, res) => {
     url: 'https://api-football-beta.p.rapidapi.com/standings',
     params: { season: '2020', league: league },
     headers: {
-      'x-rapidapi-key': process.env.X_RAPIDAPI_KEY12,
+      'x-rapidapi-key': process.env.X_RAPIDAPI_KEY,
       'x-rapidapi-host': process.env.X_RAPIDAPI_HOST,
     },
   };
