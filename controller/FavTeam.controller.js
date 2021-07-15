@@ -2,25 +2,40 @@ const { default: axios } = require('axios');
 
 const teamModel = require('../model/Team.model');
 
+
+
+const getTeams = (req, res) => {
+  teamModel.find({}, (err, teams) => {
+    if (err) res.send(err);
+    let teamIds = [];
+    teamIds = teams.map((team) => {
+      return team.id;
+    });
+    res.send(teamIds);
+  });
+};
+
 const getFavTeam = (req, res) => {
   const { name } = req.query;
-
   let options = {
     method: 'GET',
     url: 'https://api-football-beta.p.rapidapi.com/teams',
     params: { name: name },
     headers: {
-      'x-rapidapi-key': process.env.X_RAPIDAPI_KEY_5,
+      'x-rapidapi-key': process.env.X_RAPIDAPI_KEY12,
       'x-rapidapi-host': process.env.X_RAPIDAPI_HOST,
     },
   };
-
   axios
     .request(options)
     .then((response) => {
       let team = response.data.response[0].team;
-      team = new teamModel({ id: team.id, name: team.name, logo: team.logo });
-      team.save();
+      teamModel.findOne({ id: team.id }, (err, favTeam) => {
+        favTeam.id = team.id;
+        favTeam.name = team.name;
+        favTeam.logo = team.logo;
+        favTeam.save();
+      });
       res.send(team);
     })
     .catch((error) => {
@@ -31,6 +46,35 @@ const getFavTeam = (req, res) => {
       });
     });
 };
+// const getFavTeam = (req, res) => {
+//   const { name } = req.query;
+
+//   let options = {
+//     method: 'GET',
+//     url: 'https://api-football-beta.p.rapidapi.com/teams',
+//     params: { name: name },
+//     headers: {
+//       'x-rapidapi-key': process.env.X_RAPIDAPI_KEY1,
+//       'x-rapidapi-host': process.env.X_RAPIDAPI_HOST,
+//     },
+//   };
+
+//   axios
+//     .request(options)
+//     .then((response) => {
+//       let team = response.data.response[0].team;
+//       team = new teamModel({ id: team.id, name: team.name, logo: team.logo });
+//       team.save();
+//       res.send(team);
+//     })
+//     .catch((error) => {
+//       res.send({
+//         error: error,
+//         errorMessage:
+//           'Whoops, couldnt find a team with that name, check the spelling and try again',
+//       });
+//     });
+// };
 
 const getLeagueFav = (req, res) => {
   teamModel.find({}, (err, teams) => {
@@ -43,7 +87,7 @@ const getLeagueFav = (req, res) => {
           url: 'https://api-football-beta.p.rapidapi.com/leagues',
           params: { season: '2020', type: 'league', team: team.id },
           headers: {
-            'x-rapidapi-key': process.env.X_RAPIDAPI_KEY_5,
+            'x-rapidapi-key': process.env.X_RAPIDAPI_KEY12,
             'x-rapidapi-host': process.env.X_RAPIDAPI_HOST,
           },
         };
@@ -79,7 +123,7 @@ const getStandingFav = (req, res) => {
           url: 'https://api-football-beta.p.rapidapi.com/standings',
           params: { season: '2020', league: team.league },
           headers: {
-            'x-rapidapi-key': process.env.X_RAPIDAPI_KEY_5,
+            'x-rapidapi-key': process.env.X_RAPIDAPI_KEY12,
             'x-rapidapi-host': process.env.X_RAPIDAPI_HOST,
           },
         };
@@ -124,7 +168,7 @@ const getMatchesFav = (req, res) => {
       season: '2021',
     },
     headers: {
-      'x-rapidapi-key': process.env.X_RAPIDAPI_KEY_5,
+      'x-rapidapi-key': process.env.X_RAPIDAPI_KEY1,
       'x-rapidapi-host': process.env.X_RAPIDAPI_HOST,
     },
   };
@@ -190,6 +234,7 @@ const deleteTeam = (req, res) => {
 };
 
 module.exports = {
+  getTeams,
   getFavTeam,
   getLeagueFav,
   getStandingFav,
