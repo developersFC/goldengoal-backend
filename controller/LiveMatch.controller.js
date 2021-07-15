@@ -6,7 +6,7 @@ const getLiveMatches = (req, res) => {
     url: 'https://api-football-beta.p.rapidapi.com/fixtures',
     params: { live: 'all' },
     headers: {
-      'x-rapidapi-key': process.env.X_RAPIDAPI_KEY_5,
+      'x-rapidapi-key': process.env.X_RAPIDAPI_KEY,
       'x-rapidapi-host': process.env.X_RAPIDAPI_HOST,
     },
   };
