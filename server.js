@@ -14,6 +14,7 @@ app.use(cors());
 const { getLeague, getStandings } = require('./controller/Rank.controller');
 
 const {
+  getTeams,
   getFavTeam,
   getLeagueFav,
   getStandingFav,
@@ -67,7 +68,10 @@ app.get('/favleague', getLeagueFav);
 app.get('/favstanding', getStandingFav);
 app.get('/favmatches', getMatchesFav);
 app.delete('/favteam', deleteTeam);
-
 app.get('/live', getLiveMatches);
+
+app.get('/getteams', getTeams);
+
+
 
 app.listen(PORT, () => console.log(`listening on ${PORT}`));
